@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9
+FROM python:3.9-slim
 
 # Install ffmpeg which is required for audio file conversion
 RUN apt-get update && apt-get install -y ffmpeg
