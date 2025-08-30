@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.9
 
 # Install ffmpeg which is required for audio file conversion
 RUN apt-get update && apt-get install -y ffmpeg
@@ -10,10 +10,15 @@ WORKDIR /app
 # Copy the requirements file into the container
 COPY requirements.txt .
 
-# Install any needed packages specified in requirements.txt
-# Spleeter downloads models, so we need to set the cache directory
+# Set the cache directory for Spleeter models
 ENV SPLEETER_MODEL_PATH=/app/spleeter_models
+
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+
+# --- THIS IS THE NEW LINE ---
+# Download and cache the Spleeter models during the build process
+RUN python -c "from spleeter.separator import Separator; Separator('spleeter:2stems')"
 
 # Copy the rest of your app's code into the container
 COPY . .
